@@ -1,0 +1,510 @@
+<html>
+
+<head>
+    <title>Language Experiment</title>
+  </title><!--JS-->
+  <!-- external general utilities -->
+  <script src="shared/js/jquery-1.11.1.min.js"></script>
+  <script src="shared/full-projects/jquery-ui/jquery-ui.min.js"></script>
+  <script src="shared/js/underscore-min.js"></script>
+
+  <!-- experiment logic -->
+  <script src="shared/js/exp-V2.js"></script>
+  <script src="shared/js/stream-V2.js"></script>
+
+  <!-- utilities to submit data to proliferate -->
+  <script src="https://proliferate.alps.science/static/js/proliferate.js"></script>
+
+  <!-- general utilities -->
+  <script src="shared/js/browserCheck.js"></script>
+  <script src="shared/js/utils.js"></script>
+  <link href="shared/full-projects/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+  <link href="shared/css/cocolab-style.css" rel="stylesheet" type="text/css">
+  <link href="css/local-style.css" rel="stylesheet" type="text/css">
+
+    <!-- experiment file -->
+    <script src="stimuli/maze_stims_json.js"></script>
+    <script src="stimuli/example_stims.js"></script>
+    <script type="text/javascript">
+      var CONDITION = 1;
+    </script>
+    <script src="js/template.js"></script>
+
+</head>
+
+<body onload="init()">
+  <noscript>This task requires JavaScript.</noscript>
+
+  <div class="slide" id="i0" >
+    <!-- <img src="../_shared/images/cocologo.png" alt="Stanford CoCoLab" id="cocologo"></img> -->
+    <p id="cocolab">Stanford Linguistics</p>
+    <p id="instruct-text">
+      In this experiment, you will read 20 sentence pairs word-by-word. You will proceed through the sentence by pressing on your keyboard to indicate which of the two words is a good continuation of the sentence. Finally, for each sentence, answer a short question.
+      You will also be asked to complete a short personality test. Please pay attention, thanks!<br><br>
+      <strong>Please note that this experiment cannot be completed in the FireFox browser.</strong>
+    </p>
+
+    <p class="left" style="font-size: 80%">
+      <strong><br>
+      LEGAL INFORMATION</strong>:<br>
+      <br>
+        YOUR LEGAL INFORMATION GOES HERE
+      <br>
+      If you agree to participate, please proceed to the study tasks.
+    </p>
+
+    <input id="start_button" type="button" class="button" value="Start Experiment">
+  </div>
+
+
+  <div class="slide" id="instructions">
+
+		<h3>Instructions</h3>
+    <p>On the following pages, you will be asked to press SPACE to start a sentence. Once you do, you will see a pair of words, corresponding to the keys [S] and [L] on your keyboard. In these sentences, one word will be the next word in the sentence, and the other will not. Select the word that continues the sentence by pressing the key which corresponds to the word that continues the sentence.</p>
+		<p>Once you've read the sentence, please answer the yes/no question that will appear on the screen.</p>
+
+    <p>Place your left index finder on the S key. Place your right index finger on the L key. </p> <br><br> <img src="keyboard_example.png" alt="keyboard_example" width="500" height="300">
+
+    <p>If you're a bit confused, don't worry - we will start with two examples!</p>
+    <p> <strong> Press SPACE to continue! </strong> </p>
+
+
+  </div>
+
+  <!-- practice trial 1-->
+  <div class="slide" id="example">
+<div id = "stimuli">
+
+  <p class = "instructions" id="trial_instructions"> Press SPACE to begin! </p>
+
+  <div class="correct">
+    <br>
+    <p id="ex_question_correct">
+     Great job! Now please answer this question to continue.
+    </p>
+  </div>
+
+  <table style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class="likertscale" id="attention-question-sample">
+    <tr>
+      <td>
+        <p class = "center" id="attention-question-sample"> </p>
+      </td>
+    </tr>
+  </table>
+
+  <table class="sidebyside">
+    <tr id="comprehension-question-answers-sample">
+      <td class="structureleft">
+        <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="Yes_Sample" value="Yes">Yes</p>
+      </td>
+      <td class="structureright">
+        <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="No_Sample" value="No">No</p>
+      </td>
+    </tr>
+    <tr>
+      <td class="structureleft">
+        <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="left_word"></span>
+      </td>
+      <td class="structureright">
+        <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="right_word"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p class = "buttonstructure" id="s"> S </p>
+      </td>
+      <td>
+        <p class = "buttonstructure" id="l"> L </p>
+      </td>
+    </tr>
+  </table>
+  </div>
+
+    <div class="err">
+      <br>
+      <p>
+        You pressed <span id="wrong_key_input"></span>, which means you've constructed the sentence <span id="current_sentence"></span>.
+      </p>
+      <p>
+       That's not quite right. Be careful! In the real experiment, pressing the wrong continuation will cause you to go on to the next task. Try again; we've highlighted the correct word.
+      </p>
+    </div>
+
+    <div id="ex_question_error">
+      <br>
+      <p>
+       You've pressed the wrong answer! Try again, and be careful!
+      </p>
+    </div>
+
+ </div>
+
+ <!-- practice trial 2-->
+ <div class="slide" id="example2">
+<div id = "stimuli">
+
+ <p class = "instructions" id="trial_instructions2"> Press SPACE to begin; this time you won't get any hints! </p>
+
+ <div class="correct2">
+   <br>
+   <p id="ex_question_correct2">
+    Great job! Now please answer this question to continue.
+   </p>
+ </div>
+
+ <table style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class="likertscale" id="attention-question-sample2">
+   <tr>
+     <td>
+       <p class = "center" id="attention-question-sample2"> </p>
+     </td>
+   </tr>
+ </table>
+
+ <table class="sidebyside">
+   <tr id="comprehension-question-answers-sample2">
+     <td class="structureleft">
+       <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="Yes_Sample2" value="Yes">Yes</p>
+     </td>
+     <td class="structureright">
+       <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="No_Sample2" value="No">No</p>
+     </td>
+   </tr>
+   <tr>
+     <td class="structureleft">
+       <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="left_word2"></span>
+     </td>
+     <td class="structureright">
+       <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="right_word2"></span>
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <p class = "buttonstructure" id="s2"> S </p>
+     </td>
+     <td>
+       <p class = "buttonstructure" id="l2"> L </p>
+     </td>
+   </tr>
+ </table>
+ </div>
+
+   <div class="err">
+     <br>
+     <p>
+      You've pressed the wrong word! Be careful! In the real experiment, pressing the wrong continuation will cause you to go on to the next task. Try again.
+     </p>
+   </div>
+
+   <div id="ex_question_error2">
+     <br>
+     <p>
+      You've pressed the wrong answer! Try again, and be careful!
+     </p>
+   </div>
+
+</div>
+
+<div class="slide" id="almost">
+
+  <h3>Let's Get Started!</h3>
+  <p>Great job! Now we can really get started.</p>
+  <p><strong>To reiterate:</strong> On the following pages, you will be asked to press SPACE to start a sentence. Once you do, you will see a pair of words, corresponding to the keys [s] and [l] on your keyboard. In these sentences, one word will be the next word in the sentence, and the other will not. Select the word that continues the sentence by pressing the key which corresponds to the word that continues the sentence.</p>
+  <p>Once you've read the sentence, please answer the yes/no question that will appear on the screen.</p>
+
+  <p>Place your left index finder on the S key. Place your right index finger on the L key. </p> <br><br> <img src="keyboard_example.png" alt="keyboard_example" width="500" height="300">
+
+  <p><strong>Important</strong>: Please try to complete the experiment in one session without any interruptions. It should take at most 10 minutes. In this section, you will not get any hints, and if you continue a sentence incorrectly, you will be taken to the start of the next sentence. Please pay attention!</p>
+
+  <p> <strong> Press SPACE to continue! </strong> </p>
+
+</div>
+
+  <div class="slide" id="trial">
+
+    <div id = "stimuli">
+
+      <p class = "instructions" id="new_trial_instructions"> Press SPACE to begin! </p>
+
+      <div class="new_correct">
+        <br>
+        <p id="new_correct">
+         Great job! Now please answer this question to continue.
+        </p>
+      </div>
+
+      <table style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class="likertscale" id="attention-question">
+        <tr>
+          <td>
+            <p class = "center" id="attention-question"> </p>
+          </td>
+        </tr>
+      </table>
+
+      <table class="sidebyside">
+        <tr id="comprehension-question-answers">
+          <td class="structureleft">
+            <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="new_Yes" value="Yes">Yes</p>
+          </td>
+          <td class="structureright">
+            <p style="font-family:monospace; margin-top:15px;font-size:36px;font-weight:bold" id="new_No" value="No">No</p>
+          </td>
+        </tr>
+        <tr>
+          <td class="structureleft">
+            <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="new_left_word"></span>
+          </td>
+          <td class="structureright">
+            <span style="font-family:monospace; margin-top:145px;font-size:36px;font-weight:bold" class = "center" id="new_right_word"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class = "buttonstructure" id="new_s"> S </p>
+          </td>
+          <td>
+            <p class = "buttonstructure" id="new_l"> L </p>
+          </td>
+        </tr>
+      </table>
+      </div>
+
+        <div class="err" id="new_err">
+          <br>
+          <p>
+           You've pressed the wrong word! We'll have to move on to the next sentence now. <strong> Press the spacebar to continue. </strong>
+          </p>
+        </div>
+     </div>
+
+
+  </div>
+
+  <!-- subject information slide -->
+  <div class="slide" id="subj_info">
+    <div class="long_form">
+      <div class="subj_info_title">
+        Additional information
+      </div>
+
+      <p class="info">
+        Answering these questions is optional, but will help us understand your answers.
+      </p>
+
+      <p>
+        Did you read the instructions and do you think you did the study correctly?
+      </p>
+
+      <label><input type="radio" name="assess" value="No">No</label>
+      <label><input type="radio" name="assess" value="Yes">Yes</label>
+      <label><input type="radio" name="assess" value="Confused">I was confused</label>
+
+      <p>
+        Gender: <select id="gender">
+          <option value="">
+          </option>
+          <option value="Male">
+            male
+          </option>
+          <option value="Female">
+            female
+          </option>
+          <option value="Other">
+            other
+          </option>
+        </select>
+      </p>
+
+      <p>
+        Age: <input type="text" id="age">
+      </p>
+
+      <p>
+        Level of education: <select id="education">
+          <option value="-1">
+          </option>
+          <option value="0">
+            Some high school
+          </option>
+          <option value="1">
+            Graduated high school
+          </option>
+          <option value="2">
+            Some college
+          </option>
+          <option value="3">
+            Graduated college
+          </option>
+          <option value="4">
+            Hold a higher degree
+          </option>
+        </select>
+      </p>
+
+      <p>
+        Native language: <input type="text" id="language">
+      </p><label>(the language(s) spoken at home when you were a child)</label><br>
+
+      <p>
+        Do you think the payment was fair?
+      </p><select id="fairprice">
+        <option value="-1">
+        </option>
+        <option value="0">
+          The payment was too low
+        </option>
+        <option value="1">
+          The payment was fair
+        </option>
+      </select>
+
+      <p>
+        Did you enjoy the experiment?
+      </p><select id="enjoyment">
+        <option value="-1">
+        </option>
+        <option value="0">
+          Worse than the average experiment
+        </option>
+        <option value="1">
+          An average experiment
+        </option>
+        <option value="2">
+          Better than average experiment
+        </option>
+      </select>
+
+      <p>
+        We would be interested in any comments you have about this experiment. Please type them here:
+      </p>
+      <textarea id="comments" rows="3" cols="50"></textarea><br>
+      <button onclick="_s.submit()">Submit</button>
+    </div>
+  </div>
+
+  <!-- <div class="slide" id="subj_info">
+    <div class="long_form">
+      <div class="subj_info_title">Additional information</div>
+
+      <p>How old are you?</p>
+      <input type="text" id="age" />
+
+      <p>Please select your gender</p>
+      <select id="gender" name="gender">
+        <label><option value="f">female</option></label>
+        <label><option value="m" >male</option></label>
+        <label><option value="o">non-binary</option></label>
+      </select>
+
+      <p>Native Language: <input type="text" id="language"/></p>
+      <label>(the language(s) spoken at home when you were a child)</label>
+
+      <p>Which US political party, if any, do you identify with?</p>
+      <select id="poliparty" name ="poliparty">
+        <label><option value = "Republican">Republican Party</option></label>
+        <label><option value = "Democrat">Democratic Party</option></label>
+        <label><option value = "Other">Other</option></label>
+        <label><option value = "None">I do not identify with any major political party</option></label>
+      </select><br /><br>
+
+        <p>How would you describe your political ideology?</p>
+      <table class="likertscale">
+        <tr>
+          <td>
+            <p id="scale_end_one">
+            Very Progressive
+            </p>
+          </td>
+          <td>
+            <input type="radio" name="number" value="1">
+          </td>
+          <td>
+            <input type="radio" name="number" value="2">
+          </td>
+          <td>
+            <input type="radio" name="number" value="3">
+          </td>
+          <td>
+            <input type="radio" name="number" value="4">
+          </td>
+          <td>
+            <input type="radio" name="number" value="5">
+          </td>
+          <td>
+            <input type="radio" name="number" value="6">
+          </td>
+          <td>
+            <input type="radio" name="number" value="7">
+          </td>
+          <td>
+            <p id="scale_end_two">
+            Very Conservative
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            1
+          </td>
+          <td>
+            2
+          </td>
+          <td>
+            3
+          </td>
+          <td>
+            4
+          </td>
+          <td>
+            5
+          </td>
+          <td>
+            6
+          </td>
+          <td>
+            7
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class='likertlabel'>
+            Moderate
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table><br>
+
+      <p>How tired are you right now?</p>
+      <select id="tirednesslvl" name="tirednesslvl">
+        <label><option value="1">well rested</option></label>
+        <label><option value="2" >a little tired</option></label>
+        <label><option value="3" >I almost fell asleep during the experiment</option></label>
+      </select><br />
+
+      <br/>      <br/>
+
+      <button onclick="_s.submit()">Submit</button>
+    </div>
+  </div> -->
+
+  <div id="thanks" class="slide js" >
+    <p  class="big" id="thanks-text">Thanks for your time!</p>
+  </div>
+
+  <div class="progress">
+    <span>Progress:</span>
+    <div class="bar-wrapper">
+      <div class="bar" width="0%">
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
